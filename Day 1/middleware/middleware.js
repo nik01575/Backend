@@ -51,11 +51,44 @@
 
 //? Application Level Middleware : Pure App pe lge. Runs on every request.
 
+// const express = require("express");
+// const app = express()
+
 // app.use((req, res, next)=>{
-//     console.log("Every Request")
+//     console.log("Request Received : ", req.method, req.url)
 //     next();
 // });
+
+// app.get("/", (req,res)=>{
+//     res.send("Home Page")
+// })
+// app.get("/about", (req,res)=>{
+//     res.send("AboutPage")
+// })
+
 // app.listen(3000)
+
+//? User Defined Middleware : Custom middleware created by the developer. Middleware to check if a request has a special key.
+// If the user visit /secure?key=123, they get access, otherwise they get Access denied.
+
+const express = require("express");
+const app = express()
+
+const checkKey = (req,res,next)=>{
+    if(req.query.key === "123"){
+        next()
+    }else{
+        res.status(403).send("Access Denied")
+    }
+}
+
+app.get("/secure", checkKey, (req,res)=>{
+    res.send("Secure Page")
+})
+
+app.listen(3000, () => {
+    console.log("Server running on port 3000");
+});
 
 //? Route Level Middleware : Sirf ek route pe lge. Sirf /profile pe lgega.
 
